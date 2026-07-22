@@ -1,0 +1,23 @@
+[project]
+name = "aiscanner"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "fastapi[standard]>=0.139.2",
+    "langchain>=0.3.30",
+    "langchain-ollama>=0.3.10",
+    "ollama>=0.6.2",
+    "paddleocr[all]>=3.7.0",
+    "paddlepaddle-gpu==3.3.1",
+    "pypandoc>=1.17",
+]
+
+[tool.uv.sources]
+paddlepaddle-gpu = { index = "paddle-cu129" }
+
+[[tool.uv.index]]
+name = "paddle-cu129"
+url = "https://www.paddlepaddle.org.cn/packages/stable/cu129/"
+explicit = true
