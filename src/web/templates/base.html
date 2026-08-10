@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}aiscanner{% endblock %}</title>
+  <link rel="stylesheet" href="/static/tokens.css" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="app-shell">
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar__brand">aiscanner</div>
+      <ul class="sidebar__nav">
+        <li>
+          <a
+            class="sidebar__nav-item {% if request.url.path == '/' %}sidebar__nav-item--active{% endif %}"
+            href="/"
+          >
+            <span class="sidebar__nav-icon" aria-hidden="true">⬆</span>
+            <span class="sidebar__nav-label">Cargar</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="sidebar__nav-item {% if request.url.path == '/explorer' %}sidebar__nav-item--active{% endif %}"
+            href="/explorer"
+          >
+            <span class="sidebar__nav-icon" aria-hidden="true">📁</span>
+            <span class="sidebar__nav-label">Explorador</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <button class="sidebar__toggle" id="sidebar-toggle" aria-label="Abrir navegación" aria-controls="sidebar">☰</button>
+    <main class="app-content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  <script>
+    // Drawer de sidebar en móvil/tablet (design-system.md § Layout & spacing:
+    // el sidebar se oculta por defecto bajo 1024px y se abre con este botón).
+    document.getElementById("sidebar-toggle").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("sidebar--open");
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

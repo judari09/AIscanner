@@ -10,3 +10,7 @@ wheels/
 .venv
 CLAUDE.md
 /prueba
+.specify
+specs
+.claude
+output

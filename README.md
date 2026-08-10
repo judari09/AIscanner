@@ -47,6 +47,30 @@ uv run main.py notas/pag1.jpg notas/pag2.jpg notas/pag3.jpg -o notas/documento.m
 uv run main.py notas/pagina1.jpg --docx
 ```
 
+## Interfaz web
+
+Además de la CLI, hay una interfaz web local para cargar documentos y explorar lo ya procesado
+sin usar la terminal:
+
+```
+uv run serve.py
+```
+
+Abre `http://127.0.0.1:8000` en el navegador. Desde ahí puedes:
+
+- **Cargar**: seleccionar las imágenes de un documento (en orden de página), elegir si generar
+  también un `.docx`, y ver el estado del procesamiento en vivo (con opción de reintentar si
+  falla).
+- **Explorador**: ver los documentos ya procesados (por la CLI o por la propia interfaz web),
+  visualizarlos, organizarlos en carpetas, y descargarlos.
+
+**Acceso remoto**: si quieres abrir la interfaz desde otro dispositivo (ej. tu teléfono), usa
+[Tailscale](https://tailscale.com) (o WireGuard) para conectar ambos equipos a una red privada
+— la interfaz no tiene autenticación propia, así que **no** la expongas con un túnel público
+(ngrok, Cloudflare Tunnel, etc.); el único control de acceso es que solo tus propios dispositivos
+en tu red privada puedan alcanzarla. Con Tailscale activo en el equipo que corre `serve.py`,
+`uv run serve.py` imprime la URL a usar desde tus otros dispositivos.
+
 ## Cómo funciona (resumen)
 
 1. Cada imagen se preprocesa (normalización a escala de grises) y pasa por PaddleOCR, que devuelve el texto reconocido línea por línea.
