@@ -13,7 +13,7 @@ Escáner de notas manuscritas 100% local: combina [PaddleOCR](https://github.com
 
   (es multimodal — recibe texto e imágenes a la vez — y es el que usa `Structuring` por defecto).
 - **GPU NVIDIA (opcional)**: si tienes una y quieres acelerar PaddleOCR, necesitas el CUDA Toolkit y cuDNN instalados a nivel de sistema, con sus carpetas `bin` en el `PATH` (ver `pyproject.toml` para la versión exacta de `paddlepaddle-gpu` usada). Sin GPU, PaddleOCR corre en CPU sin configuración extra.
-- **Node.js + npm** (opcional, solo si tus notas tienen diagramas/dibujos): se usa para renderizar los bloques Mermaid a PNG vía `npx @mermaid-js/mermaid-cli`. La primera vez descarga Chromium (~700MB) y queda cacheado. Si no está instalado, los diagramas simplemente quedan como código Mermaid en el Markdown en vez de imagen.
+- **Node.js + npm**: obligatorio para compilar la interfaz web (`frontend/`, React + Vite). Además, si tus notas tienen diagramas/dibujos, se usa para renderizarlos a PNG vía `npx @mermaid-js/mermaid-cli` (la primera vez descarga Chromium, ~700MB, y queda cacheado) — si esto último no está disponible, los diagramas simplemente quedan como código Mermaid en el Markdown en vez de imagen, pero Node en sí ya no es opcional si vas a usar la interfaz web.
 - **Pandoc** (opcional, solo para exportar a `.docx`): se descarga solo la primera vez que se usa `--docx`, vía `pypandoc`.
 
 ## Instalación
@@ -49,12 +49,16 @@ uv run main.py notas/pagina1.jpg --docx
 
 ## Interfaz web
 
-Además de la CLI, hay una interfaz web local para cargar documentos y explorar lo ya procesado
-sin usar la terminal:
+Además de la CLI, hay una interfaz web local (React + Vite, independiente del backend — ver
+`frontend/README.md`) para cargar documentos y explorar lo ya procesado sin usar la terminal:
 
 ```
+cd frontend && npm install && npm run build
+cd ..
 uv run serve.py
 ```
+
+(El primer paso solo hace falta una vez, o cada vez que cambie el código de `frontend/`.)
 
 Abre `http://127.0.0.1:8000` en el navegador. Desde ahí puedes:
 

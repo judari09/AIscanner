@@ -9,6 +9,14 @@
  * Design 3, y una prosa con una paleta slate/blue distinta). Aquí se usa el
  * bloque de tokens como única fuente de verdad; ver design-system.md para
  * el detalle de esa decisión.
+ *
+ * Migrado desde src/web/static/tokens.css (feature 001) como parte de
+ * 002-react-frontend-migration. Paleta de color actualizada al tono
+ * "NoteScan Earth" (tierra/parchment) a partir del DESIGN.md de Stitch más
+ * reciente para la app -- mismas variables y misma estructura de tokens,
+ * solo cambian los valores hex de color; tipografía, radios y espaciado no
+ * se tocaron porque ya coincidían con la nueva referencia. Ver
+ * design-system.md para el detalle.
  */
 
 @font-face {
@@ -48,34 +56,34 @@
 
 :root {
   /* Colores -- bloque de tokens, ver design-system.md */
-  --color-surface: #f9f9ff;
-  --color-surface-dim: #cfdaf2;
-  --color-surface-bright: #f9f9ff;
+  --color-surface: #fff8f3;
+  --color-surface-dim: #e0d9d3;
+  --color-surface-bright: #fff8f3;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f0f3ff;
-  --color-surface-container: #e7eeff;
-  --color-surface-container-high: #dee8ff;
-  --color-surface-container-highest: #d8e3fb;
-  --color-on-surface: #111c2d;
-  --color-on-surface-variant: #434655;
-  --color-inverse-surface: #263143;
-  --color-inverse-on-surface: #ecf1ff;
-  --color-outline: #737686;
-  --color-outline-variant: #c3c6d7;
-  --color-surface-tint: #0053db;
-  --color-primary: #004ac6;
+  --color-surface-container-low: #faf2ec;
+  --color-surface-container: #f4ede6;
+  --color-surface-container-high: #eee7e1;
+  --color-surface-container-highest: #e8e1db;
+  --color-on-surface: #1e1b18;
+  --color-on-surface-variant: #4c463b;
+  --color-inverse-surface: #33302c;
+  --color-inverse-on-surface: #f7efe9;
+  --color-outline: #7e7669;
+  --color-outline-variant: #cfc5b6;
+  --color-surface-tint: #6f5c31;
+  --color-primary: #6f5c31;
   --color-on-primary: #ffffff;
-  --color-primary-container: #2563eb;
-  --color-on-primary-container: #eeefff;
-  --color-inverse-primary: #b4c5ff;
-  --color-secondary: #505f76;
+  --color-primary-container: #fee4ad;
+  --color-on-primary-container: #786538;
+  --color-inverse-primary: #dcc48f;
+  --color-secondary: #675d49;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #d0e1fb;
-  --color-on-secondary-container: #54647a;
-  --color-tertiary: #515659;
+  --color-secondary-container: #efe1c6;
+  --color-on-secondary-container: #6e634e;
+  --color-tertiary: #3d646f;
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #696e71;
-  --color-on-tertiary-container: #edf1f5;
+  --color-tertiary-container: #c5eefb;
+  --color-on-tertiary-container: #466d78;
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
   --color-error-container: #ffdad6;
@@ -83,21 +91,21 @@
   /* Única adición fuera del bloque de tokens original -- ver design-system.md */
   --color-warning: #f59e0b;
   --color-on-warning: #1c1500;
-  --color-primary-fixed: #dbe1ff;
-  --color-primary-fixed-dim: #b4c5ff;
-  --color-on-primary-fixed: #00174b;
-  --color-on-primary-fixed-variant: #003ea8;
-  --color-secondary-fixed: #d3e4fe;
-  --color-secondary-fixed-dim: #b7c8e1;
-  --color-on-secondary-fixed: #0b1c30;
-  --color-on-secondary-fixed-variant: #38485d;
-  --color-tertiary-fixed: #dfe3e7;
-  --color-tertiary-fixed-dim: #c3c7cb;
-  --color-on-tertiary-fixed: #171c1f;
-  --color-on-tertiary-fixed-variant: #43474b;
-  --color-background: #f9f9ff;
-  --color-on-background: #111c2d;
-  --color-surface-variant: #d8e3fb;
+  --color-primary-fixed: #fae0a9;
+  --color-primary-fixed-dim: #dcc48f;
+  --color-on-primary-fixed: #251a00;
+  --color-on-primary-fixed-variant: #55451b;
+  --color-secondary-fixed: #efe1c6;
+  --color-secondary-fixed-dim: #d3c5ac;
+  --color-on-secondary-fixed: #221b0a;
+  --color-on-secondary-fixed-variant: #4f4632;
+  --color-tertiary-fixed: #c0e9f6;
+  --color-tertiary-fixed-dim: #a5cdda;
+  --color-on-tertiary-fixed: #001f26;
+  --color-on-tertiary-fixed-variant: #244c57;
+  --color-background: #fff8f3;
+  --color-on-background: #1e1b18;
+  --color-surface-variant: #e8e1db;
 
   /* Tipografía */
   --font-family-primary: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
