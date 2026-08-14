@@ -2,10 +2,17 @@ import base64
 
 from langchain_ollama import ChatOllama
 
+# Unica fuente de verdad de la URL por defecto del daemon local de Ollama --
+# la reutiliza tambien `llm.model_catalog` para listar modelos instalados,
+# asi ambos módulos apuntan siempre al mismo Ollama sin duplicar el literal
+# (003-ui-polish-model-switch).
+DEFAULT_BASE_URL = "http://localhost:11434"
+
+
 class OllamaClient:
     """Cliente delgado sobre la API local de Ollama, vía LangChain."""
 
-    def __init__(self, model_name: str = "qwen2.5:7b-instruct", base_url: str = "http://localhost:11434"):
+    def __init__(self, model_name: str = "qwen2.5:7b-instruct", base_url: str = DEFAULT_BASE_URL):
         """
         Args:
             model_name: modelo de Ollama a usar (debe estar ya descargado,

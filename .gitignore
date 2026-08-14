@@ -14,3 +14,7 @@ CLAUDE.md
 specs
 .claude
 output
+
+# Configuracion local de la app (modelo activo, etc.) -- especifica de cada
+# instalacion, no codigo fuente (003-ui-polish-model-switch)
+config/

@@ -10,6 +10,7 @@ from web.pipeline_runner import CorePipelineRunner
 from web.routers import files as files_router
 from web.routers import health as health_router
 from web.routers import jobs as jobs_router
+from web.routers import models as models_router
 
 _WEB_DIR = Path(__file__).parent
 # El frontend es un proyecto Vite independiente (002-react-frontend-migration,
@@ -43,6 +44,7 @@ def create_app() -> FastAPI:
     app.include_router(jobs_router.router)
     app.include_router(files_router.router)
     app.include_router(health_router.router)
+    app.include_router(models_router.router)
 
     @app.on_event("startup")
     async def _start_job_queue() -> None:

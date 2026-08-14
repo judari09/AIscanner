@@ -1,0 +1,107 @@
+.card {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-1-shadow);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.modelList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: var(--spacing-sm);
+  font-family: var(--font-family-label);
+  font-size: var(--type-label-md-size);
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+}
+
+.modelListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius);
+  font-family: var(--font-family-label);
+  font-size: var(--type-label-md-size);
+  cursor: pointer;
+}
+
+.modelOption {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.activeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  font-family: var(--font-family-label);
+  font-size: var(--type-label-sm-size);
+  font-weight: var(--type-label-sm-weight);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius);
+  font-family: var(--font-family-primary);
+  font-size: var(--type-body-md-size);
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btnPrimary {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+.errorMessage {
+  background: var(--color-error-container);
+  color: var(--color-on-error-container);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.warningMessage {
+  background: var(--color-warning);
+  color: var(--color-on-warning);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.confirmation {
+  display: block;
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}

@@ -1,5 +1,12 @@
 import { emitNetworkError } from './connectionEvents'
-import type { DirectoryListing, DocumentEntry, DocumentView, FolderEntry, ProcessingJob } from './types'
+import type {
+  DirectoryListing,
+  DocumentEntry,
+  DocumentView,
+  FolderEntry,
+  ModelsResponse,
+  ProcessingJob,
+} from './types'
 
 /**
  * Se lanza cuando el `fetch` en sí falla (backend caído, sin red) -- distinto
@@ -164,4 +171,33 @@ export function downloadFolderUrl(path: string): string {
 export async function checkHealth(): Promise<boolean> {
   await request('/health')
   return true
+}
+
+/**
+ * Lista los modelos de Ollama instalados localmente y cuál está activo
+ * (US2, `contracts/api-additions.md`). Lanza `ApiError` con status `503` si
+ * no se pudo conectar con Ollama (FR-008); una lista vacía en `models` es
+ * una respuesta `200` válida (FR-009), no un error.
+ */
+export async function getModels(): Promise<ModelsResponse> {
+  const raw = await request<{ models: { name: string }[]; active_model: string }>('/api/models')
+  return { models: raw.models, activeModel: raw.active_model }
+}
+
+/**
+ * Cambia el modelo activo para todas las digitalizaciones futuras (US1).
+ *
+ * @param modelName - Nombre del modelo, tal como aparece en `getModels()`.
+ * @returns El modelo que quedó activo tras el cambio.
+ * @throws {ApiError} Con status `409` si `modelName` ya no está instalado, o
+ *   `503` si no se pudo validar contra Ollama -- en ambos casos el modelo
+ *   activo anterior no cambió (FR-005).
+ */
+export async function setActiveModel(modelName: string): Promise<{ activeModel: string }> {
+  const raw = await request<{ active_model: string }>('/api/config/active-model', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model_name: modelName }),
+  })
+  return { activeModel: raw.active_model }
 }

@@ -42,3 +42,14 @@ export interface DirectoryListing {
 export interface DocumentView {
   markdown: string
 }
+
+/** Un modelo de Ollama instalado localmente, tal como lo devuelve `GET /api/models`. */
+export interface AvailableModel {
+  name: string
+}
+
+/** Respuesta de `GET /api/models` (003-ui-polish-model-switch). */
+export interface ModelsResponse {
+  models: AvailableModel[]
+  activeModel: string
+}

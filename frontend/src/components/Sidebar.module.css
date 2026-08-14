@@ -1,17 +1,42 @@
 .sidebar {
   width: var(--layout-sidebar-width);
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
   background: var(--color-surface-container-lowest);
   border-right: 1px solid var(--color-outline-variant);
   padding: var(--spacing-lg) var(--spacing-sm);
+  /* Transición del ancho al colapsar/expandir (FR-011); el layout en fila
+     de Layout.module.css (.shell) ya estira este flex item a la altura
+     completa, así que no hace falta fijar height aquí. */
+  transition: width 0.15s ease;
+}
+
+.sidebarCollapsed {
+  width: 72px;
+}
+
+.sidebarCollapsed .navItem {
+  justify-content: center;
+  padding: var(--spacing-sm);
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.sidebarCollapsed .brandRow {
+  justify-content: center;
 }
 
 .brand {
   font-size: var(--type-headline-sm-size);
   font-weight: var(--type-headline-sm-weight);
   line-height: var(--type-headline-sm-line-height);
-  padding: 0 var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
   color: var(--color-primary);
 }
 
@@ -51,6 +76,26 @@
   font-weight: 600;
 }
 
+.collapseToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+}
+
+.collapseToggle:hover {
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+}
+
 .toggle {
   display: none;
   position: fixed;
@@ -87,5 +132,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  /* El colapso a modo solo-iconos es una preferencia de escritorio -- en el
+     layout móvil el sidebar ya es un panel superpuesto que se oculta por
+     completo tras el botón ☰, así que reducirlo a un carril angosto no
+     aporta nada aquí. */
+  .collapseToggle {
+    display: none;
   }
 }
