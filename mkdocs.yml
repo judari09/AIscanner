@@ -1,0 +1,107 @@
+site_name: aiscanner
+site_description: >-
+  Escáner de notas manuscritas 100% local: OCR (PaddleOCR) + LLM multimodal
+  (Ollama) para digitalizar manuscritos a Markdown editable.
+site_author: judari09
+repo_name: judari09/AIscanner
+repo_url: https://github.com/judari09/AIscanner
+edit_uri: edit/develop/docs/
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: es
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: brown
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Cambiar a modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: brown
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Cambiar a modo claro
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.indexes
+    - content.code.copy
+    - content.action.edit
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+
+plugins:
+  - search:
+      lang: es
+  - include-markdown
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: numpy
+            docstring_section_style: table
+            show_source: true
+            show_root_heading: true
+            show_root_full_path: false
+            merge_init_into_class: true
+            separate_signature: true
+            show_signature_annotations: true
+            heading_level: 2
+
+nav:
+  - Inicio: index.md
+  - Guía de inicio: getting-started.md
+  - Arquitectura:
+      - Visión general: architecture/overview.md
+      - Pipeline (OCR + LLM + salida): architecture/pipeline.md
+      - Backend web: architecture/web-backend.md
+      - Frontend web: architecture/frontend.md
+  - Referencia de API (Python):
+      - cli: reference/cli.md
+      - config: reference/config.md
+      - pipeline: reference/pipeline.md
+      - ocr: reference/ocr.md
+      - llm: reference/llm.md
+      - output: reference/output.md
+      - web:
+          - app: reference/web/app.md
+          - fs_utils: reference/web/fs_utils.md
+          - pipeline_runner: reference/web/pipeline_runner.md
+          - explorer.service: reference/web/explorer.md
+          - jobs: reference/web/jobs.md
+          - routers: reference/web/routers.md
+  - Historial de features:
+      - "001 · Carga web y explorador": features/001-web-ui-upload-explorer.md
+      - "002 · Migración a React": features/002-react-frontend-migration.md
+      - "003 · Selección de modelo y mejoras de UI": features/003-ui-polish-model-switch.md
+      - "004 · Aviso de digitalización completada": features/004-digitization-completion-notice.md

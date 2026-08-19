@@ -99,9 +99,17 @@ def build_user_message(pages: list[list[str]]) -> str:
     """
     Arma el mensaje de usuario a partir del resultado OCR.
 
-    Args:
-        pages: una lista de páginas, cada página es la lista de líneas de texto
-            reconocidas por PaddleOCR para esa página, en orden de lectura.
+    Parameters
+    ----------
+    pages : list[list[str]]
+        Una lista de páginas, cada página es la lista de líneas de texto
+        reconocidas por PaddleOCR para esa página, en orden de lectura.
+
+    Returns
+    -------
+    str
+        El mensaje de usuario completo (encabezado por página + texto OCR
+        crudo de cada una), listo para enviarse junto con las imágenes.
     """
     blocks = []
     for i, lines in enumerate(pages, start=1):
