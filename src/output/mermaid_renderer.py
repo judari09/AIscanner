@@ -12,6 +12,21 @@ def render_diagrams(markdown: str, output_path: str) -> str:
     de salida. Si el render de un diagrama falla (ej. Node/npx no está
     instalado), deja ese bloque mermaid tal cual, sin interrumpir el resto
     del documento.
+
+    Parameters
+    ----------
+    markdown : str
+        El Markdown completo, con cero o más bloques ` ```mermaid ` a
+        renderizar.
+    output_path : str
+        Ruta del Markdown de salida; determina la carpeta y el prefijo de
+        nombre de cada PNG generado (`<stem>_diagrama_<n>.png`).
+
+    Returns
+    -------
+    str
+        El Markdown con cada bloque mermaid renderizado con éxito
+        reemplazado por su imagen; los que fallaron quedan sin tocar.
     """
     matches = list(MERMAID_BLOCK_RE.finditer(markdown))
     if not matches:
@@ -41,16 +56,22 @@ def _render_mermaid(diagram_source: str, image_path: Path) -> bool:
     `npx`, que se descarga solo (junto con Chromium) la primera vez que se
     usa y luego queda cacheado localmente. Requiere Node.js/npm instalados.
 
-    Args:
-        diagram_source: el código mermaid (sin las vallas ```mermaid```).
-        image_path: ruta donde se debe guardar el PNG resultante; se usa la
-            misma ruta con extensión .mmd como archivo temporal de entrada,
-            que se borra al terminar.
+    Parameters
+    ----------
+    diagram_source : str
+        El código mermaid (sin las vallas ` ```mermaid `).
+    image_path : pathlib.Path
+        Ruta donde se debe guardar el PNG resultante; se usa la misma ruta
+        con extensión `.mmd` como archivo temporal de entrada, que se borra
+        al terminar.
 
-    Returns:
-        True si el PNG se generó correctamente, False si algo falló (mmdc
-        no disponible, error de mermaid-cli, timeout, etc.) — en cuyo caso
-        quien llama debe conservar el bloque mermaid original como texto.
+    Returns
+    -------
+    bool
+        `True` si el PNG se generó correctamente, `False` si algo falló
+        (`mmdc` no disponible, error de mermaid-cli, timeout, etc.) — en
+        cuyo caso quien llama debe conservar el bloque mermaid original
+        como texto.
     """
     mmd_path = image_path.with_suffix(".mmd")
     mmd_path.write_text(diagram_source, encoding="utf-8")

@@ -3,7 +3,7 @@ import cv2
 
 def preprocess_image(image_path):
     """
-    Preprocess the input image for OCR.
+    Preprocesa la imagen de entrada para el OCR.
 
     Convierte la imagen a escala de grises (y de vuelta a BGR, que es lo que
     espera PaddleOCR) para normalizar el color antes del reconocimiento. Se
@@ -12,16 +12,21 @@ def preprocess_image(image_path):
     de PaddleOCR están entrenados sobre fotos de documentos "normales", no
     sobre imágenes binarizadas e invertidas.
 
-    Args:
-        image_path (str): Path to the input image.
+    Parameters
+    ----------
+    image_path : str
+        Ruta de la imagen de entrada.
 
-    Returns:
+    Returns
+    -------
+    numpy.ndarray
         La imagen preprocesada como array de OpenCV (BGR), lista para
         pasarse a `PaddleOCR.predict`.
 
-    Raises:
-        FileNotFoundError: si `image_path` no existe o no se puede leer
-            como imagen.
+    Raises
+    ------
+    FileNotFoundError
+        Si `image_path` no existe o no se puede leer como imagen.
     """
     # Read the image
     image = cv2.imread(image_path)

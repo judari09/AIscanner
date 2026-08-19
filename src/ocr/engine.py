@@ -20,12 +20,16 @@ class OCREngine:
             )
     def perform_ocr(self, image_path):
         """
-        Perform OCR on the input image.
+        Ejecuta el OCR sobre la imagen de entrada, ya preprocesada.
 
-        Args:
-            image_path (str): Path to the input image.
+        Parameters
+        ----------
+        image_path : str
+            Ruta de la imagen de entrada.
 
-        Returns:
+        Returns
+        -------
+        list
             El resultado crudo de `PaddleOCR.predict`: una lista con un
             objeto por imagen de entrada (aquí siempre una, ya que se llama
             con una sola imagen); cada objeto es indexable como dict y

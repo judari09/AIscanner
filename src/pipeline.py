@@ -20,17 +20,23 @@ def run_pipeline(
     los diagramas a PNG; esa versión con las imágenes ya embebidas es la que
     se usa para generar el .docx cuando export_docx es True.
 
-    Args:
-        image_paths: rutas de las imágenes que forman un mismo documento
-            (páginas), en orden.
-        output_path: ruta de salida explícita para el Markdown; si no se da,
-            se deriva del nombre de la primera imagen.
-        export_docx: si es True, además del Markdown genera un .docx
-            derivado del contenido con los diagramas ya renderizados.
+    Parameters
+    ----------
+    image_paths : list[str]
+        Rutas de las imágenes que forman un mismo documento (páginas), en
+        orden.
+    output_path : str | None
+        Ruta de salida explícita para el Markdown; si no se da, se deriva
+        del nombre de la primera imagen.
+    export_docx : bool
+        Si es `True`, además del Markdown genera un `.docx` derivado del
+        contenido con los diagramas ya renderizados.
 
-    Returns:
-        Una tupla (ruta_markdown, ruta_docx), donde ruta_docx es None si
-        export_docx es False.
+    Returns
+    -------
+    tuple[pathlib.Path, pathlib.Path | None]
+        `(ruta_markdown, ruta_docx)`, donde `ruta_docx` es `None` si
+        `export_docx` es `False`.
     """
     ocr_engine = OCREngine()
 

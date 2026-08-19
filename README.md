@@ -1,83 +1,89 @@
+<p align="center">
+  <img src="docs/assets/banner.svg" alt="aiscanner: digitaliza notas manuscritas con OCR + IA local" width="100%">
+</p>
+
+<p align="center">
+  <img alt="Python 3.10-3.12" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-6f5c31">
+  <img alt="Gestionado con uv" src="https://img.shields.io/badge/gestionado%20con-uv-6f5c31">
+  <img alt="100% local" src="https://img.shields.io/badge/privacidad-100%25%20local-3d646f">
+</p>
+
 # aiscanner
 
-Escáner de notas manuscritas 100% local: combina [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) para extraer el texto con un LLM multimodal corriendo en [Ollama](https://ollama.com) para corregir errores de OCR, reconstruir la estructura del documento y generar Markdown editable — incluyendo diagramas dibujados a mano, convertidos a [Mermaid](https://mermaid.js.org) y renderizados como imagen. Nada de lo que escaneas sale de tu máquina.
+Escáner de notas manuscritas 100% local: combina [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
+para extraer el texto con un LLM multimodal corriendo en [Ollama](https://ollama.com) para
+corregir errores de OCR, reconstruir la estructura del documento y generar Markdown editable —
+incluyendo diagramas dibujados a mano, convertidos a [Mermaid](https://mermaid.js.org) y
+renderizados como imagen. Nada de lo que escaneas sale de tu máquina.
+
+📖 **Documentación completa**: guía de inicio detallada, arquitectura, referencia de API generada
+desde los docstrings y el historial de cada feature — ver [Documentación](#documentación) abajo.
 
 ## Requisitos
 
-- **Python 3.10 a 3.12** (paddlepaddle no publica wheels para 3.13+ todavía). Gestionado con [`uv`](https://docs.astral.sh/uv/).
-- **[Ollama](https://ollama.com)** corriendo en `localhost:11434`, con el modelo `gemma3:4b` descargado:
+- **Python 3.10 a 3.12** (paddlepaddle no publica wheels para 3.13+ todavía). Gestionado con
+  [`uv`](https://docs.astral.sh/uv/).
+- **[Ollama](https://ollama.com)** corriendo en `localhost:11434`, con al menos un modelo
+  multimodal descargado:
 
-  ```
+  ```sh
   ollama pull gemma3:4b
   ```
 
-  (es multimodal — recibe texto e imágenes a la vez — y es el que usa `Structuring` por defecto).
-- **GPU NVIDIA (opcional)**: si tienes una y quieres acelerar PaddleOCR, necesitas el CUDA Toolkit y cuDNN instalados a nivel de sistema, con sus carpetas `bin` en el `PATH` (ver `pyproject.toml` para la versión exacta de `paddlepaddle-gpu` usada). Sin GPU, PaddleOCR corre en CPU sin configuración extra.
-- **Node.js + npm**: obligatorio para compilar la interfaz web (`frontend/`, React + Vite). Además, si tus notas tienen diagramas/dibujos, se usa para renderizarlos a PNG vía `npx @mermaid-js/mermaid-cli` (la primera vez descarga Chromium, ~700MB, y queda cacheado) — si esto último no está disponible, los diagramas simplemente quedan como código Mermaid en el Markdown en vez de imagen, pero Node en sí ya no es opcional si vas a usar la interfaz web.
-- **Pandoc** (opcional, solo para exportar a `.docx`): se descarga solo la primera vez que se usa `--docx`, vía `pypandoc`.
+- **GPU NVIDIA (opcional)**: acelera PaddleOCR si tienes CUDA Toolkit + cuDNN instalados a nivel
+  de sistema (ver `pyproject.toml` para la versión exacta de `paddlepaddle-gpu`). Sin GPU,
+  PaddleOCR corre en CPU sin configuración extra.
+- **Node.js + npm**: obligatorio para compilar la interfaz web (`frontend/`, React + Vite), y para
+  renderizar diagramas dibujados a mano vía `npx @mermaid-js/mermaid-cli` (si no está disponible,
+  los diagramas quedan como código Mermaid en el Markdown en vez de imagen).
+- **Pandoc** (opcional, solo para exportar a `.docx`): se descarga solo la primera vez que se usa
+  `--docx`, vía `pypandoc`.
 
 ## Instalación
 
-```
+```sh
 uv sync
 ```
 
-Esto instala las dependencias de Python declaradas en `pyproject.toml` (incluye `paddleocr`, `paddlepaddle-gpu`, `langchain-ollama`, `pypandoc`, etc.).
+## Uso por línea de comandos
 
-## Uso
-
-```
+```sh
 uv run main.py <imagen1> [imagen2 ...] [-o salida.md] [--docx]
 ```
 
-- Las imágenes son las páginas de un mismo documento, en orden — se combinan en un solo Markdown coherente.
-- `-o/--output`: ruta del Markdown de salida. Si no se da, se deriva del nombre de la primera imagen (ej. `notas/1.jpeg` → `notas/1.md`).
-- `--docx`: además del Markdown, genera un `.docx` editable con el mismo contenido (incluyendo los diagramas ya renderizados como imagen).
-
-Ejemplos:
-
-```
-# Una sola página
-uv run main.py notas/pagina1.jpg
-
-# Documento de varias páginas, con ruta de salida explícita
-uv run main.py notas/pag1.jpg notas/pag2.jpg notas/pag3.jpg -o notas/documento.md
-
-# También exportar a Word
-uv run main.py notas/pagina1.jpg --docx
+```sh
+# Documento de varias páginas, con salida explícita y export a Word
+uv run main.py notas/pag1.jpg notas/pag2.jpg -o notas/documento.md --docx
 ```
 
 ## Interfaz web
 
-Además de la CLI, hay una interfaz web local (React + Vite, independiente del backend — ver
-`frontend/README.md`) para cargar documentos y explorar lo ya procesado sin usar la terminal:
-
-```
-cd frontend && npm install && npm run build
+```sh
+cd frontend && npm install && npm run build   # solo la primera vez, o si cambia frontend/
 cd ..
 uv run serve.py
 ```
 
-(El primer paso solo hace falta una vez, o cada vez que cambie el código de `frontend/`.)
+Abre `http://127.0.0.1:8000`: **Cargar** documentos, **Explorador** de lo ya procesado, y
+**Configuración** para elegir qué modelo de Ollama usa el digitalizador. Para acceso remoto (ej.
+desde tu teléfono), usa [Tailscale](https://tailscale.com) — la interfaz no tiene autenticación
+propia, así que **no** la expongas con un túnel público.
 
-Abre `http://127.0.0.1:8000` en el navegador. Desde ahí puedes:
+## Documentación
 
-- **Cargar**: seleccionar las imágenes de un documento (en orden de página), elegir si generar
-  también un `.docx`, y ver el estado del procesamiento en vivo (con opción de reintentar si
-  falla).
-- **Explorador**: ver los documentos ya procesados (por la CLI o por la propia interfaz web),
-  visualizarlos, organizarlos en carpetas, y descargarlos.
+La documentación completa del proyecto vive en [MkDocs](https://www.mkdocs.org/) y se genera a
+partir del propio código (docstrings numpydoc) y de las especificaciones versionadas de cada
+feature (`specs/`), para que se mantenga sincronizada con lo que el código realmente hace:
 
-**Acceso remoto**: si quieres abrir la interfaz desde otro dispositivo (ej. tu teléfono), usa
-[Tailscale](https://tailscale.com) (o WireGuard) para conectar ambos equipos a una red privada
-— la interfaz no tiene autenticación propia, así que **no** la expongas con un túnel público
-(ngrok, Cloudflare Tunnel, etc.); el único control de acceso es que solo tus propios dispositivos
-en tu red privada puedan alcanzarla. Con Tailscale activo en el equipo que corre `serve.py`,
-`uv run serve.py` imprime la URL a usar desde tus otros dispositivos.
+```sh
+uv run mkdocs serve
+```
 
-## Cómo funciona (resumen)
+Abre `http://127.0.0.1:8001`. Incluye:
 
-1. Cada imagen se preprocesa (normalización a escala de grises) y pasa por PaddleOCR, que devuelve el texto reconocido línea por línea.
-2. El texto OCR de todas las páginas, junto con las imágenes originales, se envía a un LLM multimodal local (Ollama) con instrucciones estrictas de: corregir errores de OCR usando contexto, no inventar ni omitir contenido, reconstruir títulos/listas/párrafos, y representar diagramas dibujados a mano como bloques Mermaid.
-3. Los bloques Mermaid se renderizan a PNG (si Node/mermaid-cli están disponibles) y se embeben en el Markdown.
-4. El Markdown final se escribe a disco; si se pidió `--docx`, se convierte además a Word con Pandoc.
+- **Guía de inicio** completa (requisitos, instalación, CLI, interfaz web, acceso remoto).
+- **Arquitectura**: cómo fluye un documento de punta a punta, backend web, frontend.
+- **Referencia de API**: documentación autogenerada de cada módulo Python.
+- **Historial de features**: qué se construyó en cada iteración y por qué (specs de spec-kit).
+
+`uv run mkdocs build` genera el sitio estático en `site/` para publicarlo donde quieras.
