@@ -69,12 +69,18 @@ function toProcessingJob(raw: {
   status: ProcessingJob['status']
   error_message: string | null
   result_document_path: string | null
+  document_relative_path: string | null
+  markdown_filename: string | null
+  docx_filename: string | null
 }): ProcessingJob {
   return {
     jobId: raw.job_id,
     status: raw.status,
     errorMessage: raw.error_message,
     resultDocumentPath: raw.result_document_path,
+    documentRelativePath: raw.document_relative_path,
+    markdownFilename: raw.markdown_filename,
+    docxFilename: raw.docx_filename,
   }
 }
 

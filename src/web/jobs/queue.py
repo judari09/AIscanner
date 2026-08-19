@@ -110,7 +110,10 @@ class JobQueue:
             result = await asyncio.to_thread(
                 self._runner.run, job.image_paths, job.document_dir, job.export_docx
             )
-            job.mark_done(result.markdown_path)
+            # result.docx_path ya lo calculaba el pipeline; antes se tiraba
+            # aqui mismo, dejando al job sin forma de anunciar ese archivo
+            # (004-digitization-completion-notice).
+            job.mark_done(result.markdown_path, result.docx_path)
         except Exception as exc:  # noqa: BLE001 -- cualquier fallo del pipeline debe quedar visible al usuario, no tumbar el worker
             logger.exception("Fallo procesando el trabajo %s", job.job_id)
             job.mark_failed(str(exc))

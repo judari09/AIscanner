@@ -99,7 +99,20 @@ def _validate_image_extensions(images: list[UploadFile]) -> list[str]:
 
 
 def _job_to_dict(job: ProcessingJob) -> dict:
-    """Serializa un `ProcessingJob` al formato de respuesta de `contracts/api.md`."""
+    """
+    Serializa un `ProcessingJob` al formato de respuesta de `contracts/api.md`,
+    extendido por `contracts/api-additions.md` de 004-digitization-completion-notice
+    con `document_relative_path`/`markdown_filename`/`docx_filename`.
+
+    Esos tres campos nuevos solo tienen valor cuando el job ya terminó
+    (`result_document_path` no es `None`) -- se usa esa condición en vez de
+    comparar `job.status` para no tener que importar `JobStatus` aquí solo
+    para esto, igual que ya hacia el campo `result_document_path` existente.
+    `document_relative_path` se calcula aqui (en el router web, que ya conoce
+    `OUTPUT_DIR`) y no en `ProcessingJob`, para no filtrar ese conocimiento
+    hacia el modelo del job (Principio II).
+    """
+    done = job.result_document_path is not None
     return {
         "job_id": job.job_id,
         "status": job.status.value,
@@ -107,6 +120,11 @@ def _job_to_dict(job: ProcessingJob) -> dict:
         "result_document_path": (
             str(job.result_document_path) if job.result_document_path else None
         ),
+        "document_relative_path": (
+            job.document_dir.relative_to(OUTPUT_DIR).as_posix() if done else None
+        ),
+        "markdown_filename": job.result_document_path.name if done else None,
+        "docx_filename": job.docx_path.name if job.docx_path else None,
     }
 
 

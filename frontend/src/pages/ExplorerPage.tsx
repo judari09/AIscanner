@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { createFolder, downloadFileUrl, downloadFolderUrl, listFiles, moveFile } from '../api/client'
 import type { DirectoryListing, DocumentEntry, FolderEntry } from '../api/types'
 import { DocumentViewer } from '../components/DocumentViewer'
@@ -13,12 +14,19 @@ import styles from './ExplorerPage.module.css'
  * con mouse, igual que en la feature 001) y un botón "Mover…" explícito por
  * ítem (necesario porque el drag-and-drop puro no es operable por teclado,
  * y FR-010 de esta feature exige que todo flujo lo sea).
+ *
+ * También acepta llegar con un documento a abrir de inmediato vía los query
+ * params `open`/`name` de la URL (ej. `/explorer?open=mi-doc&name=mi-doc.md`),
+ * que es como `CompletionToast` (004-digitization-completion-notice, FR-008)
+ * enlaza directo a un documento recién generado sin que el usuario tenga que
+ * ubicarlo manualmente en la lista.
  */
 export function ExplorerPage() {
+  const [searchParams] = useSearchParams()
   const [currentPath, setCurrentPath] = useState('')
   const [listing, setListing] = useState<DirectoryListing | null>(null)
-  const [viewerPath, setViewerPath] = useState<string | null>(null)
-  const [viewerName, setViewerName] = useState('')
+  const [viewerPath, setViewerPath] = useState<string | null>(() => searchParams.get('open'))
+  const [viewerName, setViewerName] = useState(() => searchParams.get('name') ?? '')
   const [dragOverPath, setDragOverPath] = useState<string | null>(null)
 
   const reload = useCallback((path: string) => {

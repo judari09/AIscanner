@@ -1,0 +1,46 @@
+.toast {
+  position: relative;
+  display: block;
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  padding-right: var(--spacing-xl);
+  margin-top: var(--spacing-md);
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  border: none;
+  background: transparent;
+  color: var(--color-on-primary-container);
+  cursor: pointer;
+  font-size: var(--type-label-md-size);
+  line-height: 1;
+  padding: var(--spacing-xs);
+}
+
+.closeButton:hover {
+  opacity: 0.7;
+}
+
+.message {
+  margin: 0;
+  font-weight: 600;
+}
+
+.filenames {
+  margin: var(--spacing-xs) 0 0;
+  font-family: var(--font-family-label);
+  font-size: var(--type-body-md-size);
+}
+
+.link {
+  display: inline-block;
+  margin-top: var(--spacing-sm);
+  color: var(--color-on-primary-container);
+  font-weight: 600;
+  text-decoration: underline;
+}

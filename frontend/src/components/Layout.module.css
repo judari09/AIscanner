@@ -5,8 +5,17 @@
 
 .content {
   flex: 1;
+  /* Sin esto, un hijo con contenido intrínsecamente ancho (ej. una tabla o
+     un bloque de código largo en el visor de documentos) podría empujar
+     este flex item más allá del espacio real disponible junto al sidebar,
+     en vez de recortarse/hacer scroll dentro de su propio ancho. */
+  min-width: 0;
   padding: var(--layout-gutter);
-  max-width: var(--layout-container-max);
+  /* Sin un max-width fijo: el contenido siempre ocupa el espacio que el
+     flex `.shell` le deja libre junto al sidebar, tanto expandido como
+     colapsado (003-ui-polish-model-switch) -- un tope fijo (ej. 1280px)
+     dejaba una franja vacía en pantallas anchas incluso con la barra en su
+     ancho normal, no solo al colapsarla. */
 }
 
 @media (max-width: 1024px) {

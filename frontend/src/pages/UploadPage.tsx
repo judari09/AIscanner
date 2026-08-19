@@ -1,5 +1,6 @@
 import { useId, useState, type SyntheticEvent } from 'react'
 import { ApiError } from '../api/client'
+import { CompletionToast } from '../components/CompletionToast'
 import { useJobPolling } from '../hooks/useJobPolling'
 import styles from './UploadPage.module.css'
 
@@ -158,14 +159,9 @@ export function UploadPage() {
               </button>
             </>
           )}
-          {job.status === 'done' && (
-            <p>
-              Documento generado: <strong>{job.resultDocumentPath}</strong>. Puedes verlo en el{' '}
-              <a href="/explorer">explorador</a>.
-            </p>
-          )}
         </div>
       )}
+      <CompletionToast job={job} />
     </>
   )
 }

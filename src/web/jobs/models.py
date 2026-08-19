@@ -43,6 +43,12 @@ class ProcessingJob:
     result_document_path : pathlib.Path | None
         Ruta del Markdown resultante, solo presente cuando
         `status is JobStatus.DONE`.
+    docx_path : pathlib.Path | None
+        Ruta del `.docx` resultante, solo presente cuando `export_docx` era
+        `True` y `status is JobStatus.DONE` (004-digitization-completion-notice:
+        antes se descartaba el `docx_path` que ya devolvía el pipeline, dejando
+        a la interfaz sin forma de anunciar ese archivo en el aviso de
+        finalización).
     created_at : datetime.datetime
         Usado para ordenar la cola si hay mas de un trabajo pendiente.
     """
@@ -53,6 +59,7 @@ class ProcessingJob:
     status: JobStatus = JobStatus.QUEUED
     error_message: str | None = None
     result_document_path: Path | None = None
+    docx_path: Path | None = None
     created_at: datetime = field(default_factory=datetime.now)
 
     @property
@@ -73,10 +80,20 @@ class ProcessingJob:
         self.status = JobStatus.PROCESSING
         self.error_message = None
 
-    def mark_done(self, result_document_path: Path) -> None:
-        """Transiciona el trabajo a `DONE` con la ruta del Markdown resultante."""
+    def mark_done(self, result_document_path: Path, docx_path: Path | None = None) -> None:
+        """
+        Transiciona el trabajo a `DONE` con las rutas de los archivos resultantes.
+
+        Parameters
+        ----------
+        result_document_path : pathlib.Path
+            Ruta del Markdown resultante.
+        docx_path : pathlib.Path | None
+            Ruta del `.docx` resultante, si `export_docx` era `True`.
+        """
         self.status = JobStatus.DONE
         self.result_document_path = result_document_path
+        self.docx_path = docx_path
 
     def mark_failed(self, error_message: str) -> None:
         """Transiciona el trabajo a `FAILED` guardando el motivo para mostrarlo al usuario."""

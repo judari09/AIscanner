@@ -14,6 +14,16 @@ export interface ProcessingJob {
   status: JobStatus
   errorMessage: string | null
   resultDocumentPath: string | null
+  /**
+   * Ruta del documento relativa a `OUTPUT_DIR`, en el mismo formato que usa
+   * `GET /api/files*`; solo presente cuando `status` es `'done'`
+   * (004-digitization-completion-notice).
+   */
+  documentRelativePath: string | null
+  /** Nombre del archivo Markdown generado; solo presente cuando `status` es `'done'`. */
+  markdownFilename: string | null
+  /** Nombre del archivo Word generado, o `null` si no se pidió o no se generó. */
+  docxFilename: string | null
 }
 
 /** Una carpeta de organización, tal como la devuelve `GET /api/files`. */

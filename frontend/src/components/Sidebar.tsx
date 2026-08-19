@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { useSidebarCollapse } from '../hooks/useSidebarCollapse'
 import { ChevronIcon } from './icons/ChevronIcon'
 import { ExplorerIcon } from './icons/ExplorerIcon'
 import { SettingsIcon } from './icons/SettingsIcon'
@@ -32,19 +31,29 @@ const NAV_ITEMS = [
   },
 ]
 
+interface SidebarProps {
+  /** Si la barra está en modo compacto (solo iconos). Controlado por `Layout` (ver su docstring). */
+  collapsed: boolean
+  /** Alterna `collapsed`. */
+  onToggleCollapse: () => void
+}
+
 /**
  * Navegación entre "Cargar", "Explorador" y "Configuración", con iconos SVG
  * propios (US4 de 003-ui-polish-model-switch, reemplazan los emojis de la
- * feature 001) y ayuda contextual por icono (US3, `ScreenHelpTooltip`). La
- * barra puede colapsarse a un modo solo-iconos que recuerda su estado entre
- * sesiones (`useSidebarCollapse`, FR-011/FR-012). En pantallas angostas
- * (`<1024px`) sigue además ocultándose tras un botón de menú, igual que en
- * la feature 001 -- ese comportamiento responsive es independiente del
- * colapso manual de escritorio.
+ * feature 001) y ayuda contextual por icono (US3, `ScreenHelpTooltip`).
+ *
+ * El estado de colapso (`collapsed`/`onToggleCollapse`) vive en `Layout`, no
+ * aquí: el contenido principal (`.content` en `Layout.module.css`) necesita
+ * reaccionar al mismo cambio para aprovechar el ancho que la barra libera al
+ * colapsarse, así que ambos deben compartir una única fuente de verdad en
+ * vez de que `Sidebar` la mantenga en privado. En pantallas angostas
+ * (`<1024px`) la barra sigue además ocultándose tras un botón de menú, igual
+ * que en la feature 001 -- ese comportamiento responsive es independiente
+ * del colapso manual de escritorio.
  */
-export function Sidebar() {
+export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { collapsed, toggle } = useSidebarCollapse()
 
   return (
     <>
@@ -64,13 +73,13 @@ export function Sidebar() {
         aria-label="Navegación principal"
       >
         <div className={styles.brandRow}>
-          {!collapsed && <span className={styles.brand}>AIscanner</span>}
+          {!collapsed && <span className={styles.brand}>aiscanner</span>}
           <button
             type="button"
             className={styles.collapseToggle}
             aria-label={collapsed ? 'Expandir barra lateral' : 'Colapsar barra lateral'}
             aria-pressed={collapsed}
-            onClick={toggle}
+            onClick={onToggleCollapse}
           >
             <ChevronIcon direction={collapsed ? 'right' : 'left'} />
           </button>
