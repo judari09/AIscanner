@@ -1,0 +1,67 @@
+name: Documentación
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "docs/**"
+      - "specs/**"
+      - "src/**"
+      - "frontend/README.md"
+      - "mkdocs.yml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Evita que dos despliegues se pisen entre sí si llegan dos pushes seguidos;
+# no cancela uno ya en curso, para no dejar GitHub Pages en un estado a medio
+# desplegar.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      # Solo el grupo "dev" (mkdocs + mkdocstrings + material + include-markdown),
+      # sin instalar el proyecto ni sus dependencias principales (paddleocr,
+      # paddlepaddle-gpu, langchain, fastapi...) -- mkdocstrings usa análisis
+      # estático (griffe) sobre los .py de src/, nunca los importa en tiempo de
+      # ejecución, así que ese stack pesado no hace falta para construir la doc.
+      - name: Instalar solo las dependencias de documentación
+        run: uv sync --only-dev --no-install-project --frozen
+
+      - name: Construir el sitio (--strict falla ante enlaces/anclas rotos)
+        run: uv run --no-sync mkdocs build --strict
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir el sitio como artefacto de Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar a GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
