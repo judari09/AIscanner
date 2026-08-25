@@ -1,7 +1,7 @@
 import { useId, useState, type SyntheticEvent } from 'react'
 import { ApiError } from '../api/client'
 import { CompletionToast } from '../components/CompletionToast'
-import { useJobPolling } from '../hooks/useJobPolling'
+import { useJobTracking } from '../hooks/useJobTracking'
 import styles from './UploadPage.module.css'
 
 const ACCEPTED_TYPES = new Set(['image/jpeg', 'image/png'])
@@ -31,7 +31,7 @@ export function UploadPage() {
   const [dragActive, setDragActive] = useState(false)
   const [rejectedFiles, setRejectedFiles] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
-  const { job, submit, retry } = useJobPolling()
+  const { job, submit, retry } = useJobTracking()
   const fileInputId = useId()
 
   /**
