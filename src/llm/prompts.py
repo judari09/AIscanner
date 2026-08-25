@@ -8,9 +8,14 @@ redacción y explicaciones (si las hubiera) deben ser en español.
 
 Usa la imagen de cada página para dos cosas: (a) contrastar visualmente las \
 palabras del OCR que te parezcan dudosas o marcadas como [?palabra], corrigiéndolas \
-solo si al ver la imagen quedas realmente seguro; y (b) detectar diagramas, cajas, \
-flechas o mapas conceptuales dibujados a mano que el OCR no puede representar bien \
-como texto lineal.
+solo si al ver la imagen quedas realmente seguro; y (b) detectar cualquier diagrama, \
+esquema o dibujo relacional que el OCR no puede representar bien como texto lineal: \
+cajas y flechas, mapas mentales (un concepto central con ramas), tablas o \
+cuadrículas dibujadas a mano, subrayados o llaves que conectan una palabra con \
+varias sub-ideas, o incluso una secuencia mínima de dos elementos unidos por una \
+sola flecha sin caja alrededor. Ante la duda de si algo es un diagrama o texto \
+disperso, trátalo como diagrama: es preferible representar de más que perder una \
+relación visual que sí estaba en el original.
 
 Reglas estrictas:
 
@@ -40,15 +45,24 @@ empiezan con "-"), y párrafos según la agrupación de líneas.
 en orden. No menciones "página 1", "página 2", etc., salvo que esas palabras ya \
 estén escritas en el original.
 
-5. Si en la imagen de una página ves un diagrama dibujado a mano (cajas, flechas, \
-mapas conceptuales), represéntalo con un bloque ```mermaid``` (sintaxis flowchart: \
-"flowchart TD" o "flowchart LR") en el lugar del documento donde aparece ese \
-diagrama, usando como nodos el texto que esas cajas contienen y como conexiones las \
-flechas que veas, con la misma dirección que tienen en el dibujo. No generes SVG ni \
-ningún otro formato de imagen. Si una página no tiene ningún diagrama, no agregues \
-ningún bloque mermaid para ella. El bloque mermaid es un complemento del texto, no \
-un reemplazo: el texto de las cajas también debe aparecer en el Markdown como texto \
-normal si el original lo repite fuera del dibujo.
+5. Presta atención especial a cualquier diagrama, esquema o dibujo relacional en la \
+imagen de cada página -- no solo cajas y flechas clásicas, también mapas mentales, \
+tablas dibujadas a mano, subrayados/llaves que conectan una palabra con varias \
+sub-ideas, o una secuencia mínima de elementos unidos por una sola flecha sin caja \
+alrededor. Una señal común de que hay un diagrama: el OCR devuelve palabras o \
+frases cortas y sueltas que no forman una oración ni un párrafo coherente -- si ves \
+eso, revisa la imagen de esa zona antes de asumir que es solo texto desordenado y \
+transcribirlo como líneas sueltas.
+
+Representa cada diagrama que identifiques con un bloque ```mermaid``` (sintaxis \
+flowchart: "flowchart TD" o "flowchart LR") en el lugar del documento donde aparece, \
+usando como nodos el texto que contienen las cajas/círculos/palabras y como \
+conexiones las líneas o flechas que veas, con la misma dirección que tienen en el \
+dibujo. No generes SVG ni ningún otro formato de imagen. Si una página no tiene \
+ningún diagrama, no agregues ningún bloque mermaid para ella -- pero no descartes \
+uno solo porque sea simple o pequeño. El bloque mermaid es un complemento del \
+texto, no un reemplazo: el texto de las cajas también debe aparecer en el Markdown \
+como texto normal si el original lo repite fuera del dibujo.
 
 6. Responde ÚNICAMENTE con el Markdown resultante. Sin comentarios, sin explicar \
 qué hiciste, sin encerrar todo el documento en un solo bloque de código (los \
@@ -92,6 +106,28 @@ Nota por qué: el OCR solo devuelve las etiquetas de las cajas y de las flechas 
 líneas sueltas, sin decir qué conecta con qué ni en qué dirección — eso solo se ve
 en la imagen. Por eso el diagrama se reconstruye mirando la imagen, no solo el
 texto del OCR, y se representa como mermaid en vez de como texto lineal o una tabla.
+
+Ejemplo de un diagrama mínimo que también cuenta (sin cajas dibujadas):
+
+Entrada (OCR crudo, dos palabras sueltas sin relación gramatical entre sí):
+Cliente
+Servidor
+
+(en la imagen se ve la palabra "Cliente" arriba y "Servidor" abajo, unidas por una
+sola flecha que apunta de la primera a la segunda, sin ninguna caja dibujada
+alrededor de las palabras)
+
+Salida esperada (fragmento del Markdown en el lugar donde aparece el dibujo):
+```mermaid
+flowchart TD
+    Cliente --> Servidor
+```
+
+Nota por qué: aunque no hay cajas ni varios elementos, sigue siendo una relación
+dibujada que el texto lineal no puede expresar. Dos palabras sueltas sin relación
+gramatical, unidas por una flecha en la imagen, ya es un diagrama que hay que
+representar como mermaid — no basta con transcribirlas como si fueran dos líneas de
+texto normales.
 """
 
 
